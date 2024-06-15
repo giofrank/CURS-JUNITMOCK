@@ -3,6 +3,7 @@ package dev.VentaEntradas.application.service.mantenimiento.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.VentaEntradas.application.service.mantenimiento.AsientoService;
@@ -19,9 +20,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AsientoServiceImpl implements AsientoService {
-	private final AsientoJpa asientoJpa;
-	private final LugarJpa lugarJpa;
-	private final MapperUtil mapperUtil;
+	@Autowired
+	private  AsientoJpa asientoJpa;
+	@Autowired
+	private  LugarJpa lugarJpa;
+	@Autowired
+	private  MapperUtil mapperUtil;
 	
 	@Override
 	public List<AsientoDomain> findByObjects(AsientoDTO t) throws ServiceException {

@@ -1,6 +1,7 @@
 package dev.VentaEntradas.infraestructure.controllers.mantenimiento;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.util.List;
 
@@ -10,18 +11,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import dev.VentaEntradas.application.service.mantenimiento.TipoEntradaService;
 import dev.VentaEntradas.domain.TipoEntradaDomain;
 import lombok.extern.slf4j.Slf4j;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -29,16 +26,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+/*SE COMENTA NO AUN NECESARIO*/
+//@ExtendWith(MockitoExtension.class)
+//@EnableWebMvc
+
+
+/*TODO ERRORES
+ * @MockBean => @SpyBean 
+ * SE AGREGA AL USAR INTERFACES E IMPLEMENTACIONES
+ * @SpringBootTest(classes = { TipoEntradaController.class }) =>
+ * @SpringBootTest
+ * PARA QUE SCANNEE TODAS LAS CLASES
+ * ULTIMO context-path NO ES NECESARIO DECLARAR 
+ * */
+
 @AutoConfigureMockMvc
 @Slf4j
-@SpringBootTest(classes = { TipoEntradaController.class })
-@EnableWebMvc
+@SpringBootTest
 public class TipoEntradaControllerMockMvcTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
-	@MockBean
+	@SpyBean
 	private TipoEntradaService tipoEntradaService;
 	
 	
@@ -50,22 +59,22 @@ public class TipoEntradaControllerMockMvcTest {
 	@Test
 	public void others() throws Exception{
 		List<TipoEntradaDomain> retlist = tipoEntradaService.findByObjects(null);
-		tipoEntradaService.findByObjects(null).forEach(System.out::println);
 		log.info("retlist, {}", retlist);
 		
-		mockMvc.perform(get("/venta-entradas/tipo-entrada/115"))
+		mockMvc.perform(get("/tipo-entrada/2")
+		.header("Origin", "http://localhost:4200")) // Simular una solicitud desde otro origen
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 		
-		//ResultActions result = mockMvc.perform(get("/venta-entradas/tipo-entrada")).andDo(print());
+		ResultActions result = mockMvc.perform(get("/tipo-entrada")).andDo(print());
 		
 		// Then
-		//result.andExpect(status().isOk());
-		//result.andExpect(jsonPath("$[0].nombre",equalTo("LAPTOP  ASUS VIVOBOOK PRO")));
+		result.andExpect(status().isOk());
+		result.andExpect(jsonPath("$[1].nombre",equalTo("prubasJsonv3")));
 
 		// Info
-		//log.info("result ->" + result.andReturn().getResponse().getContentAsString());
+		log.info("result ->" + result.andReturn().getResponse().getContentAsString());
 				
-		//assertThat(result).isNotNull();
+		assertThat(result).isNotNull();
 	}
 }

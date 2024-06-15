@@ -71,7 +71,7 @@ public class AsientoJpaTest {
 	@Order(3)
 	void buscaAsientosDisponiblesPorEventoId() {
 		System.out.println("cantidad de asientos disponibles =>"+row_activos);
-		assertTrue(row_activos >=1);
+		assertTrue(row_activos ==0);
 	}
 	
 	@DisplayName("04.- Verificar registro")

@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 
 @TestMethodOrder(value =OrderAnnotation.class )
-public class TipoEntradaControllerTest {
+public class TipoEntradaControllerttTest {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		  baseURI = "http://localhost:8085/venta-entradas/";
